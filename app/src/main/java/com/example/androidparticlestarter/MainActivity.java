@@ -22,8 +22,10 @@ import io.particle.android.sdk.utils.Async;
 
 public class MainActivity extends AppCompatActivity {
     // MARK: Debug info
-    private final String TAG = "Jatin";
-
+    private final String TAG="Jatin";
+    int score = 0;
+//EditText e = findViewById(R.id.editText9);
+    // MARK: Particle Account Info
     private final String PARTICLE_USERNAME = "jatin_verma@outlook.com";
     private final String PARTICLE_PASSWORD = "kaur1234";
 
@@ -50,36 +52,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Custom function to connect to the Particle Cloud and get the device
-     */
-    public void getDeviceFromCloud() {
-        // This function runs in the background
-        // It tries to connect to the Particle Cloud and get your device
-        Async.executeAsync(ParticleCloudSDK.getCloud(), new Async.ApiWork<ParticleCloud, Object>() {
-
-            @Override
-            public Object callApi(@NonNull ParticleCloud particleCloud) throws ParticleCloudException, IOException {
-                particleCloud.logIn(PARTICLE_USERNAME, PARTICLE_PASSWORD);
-                mDevice = particleCloud.getDevice(DEVICE_ID);
-                return -1;
-            }
-
-            @Override
-            public void onSuccess(Object o) {
-                Log.d(TAG, "Successfully got device from Cloud");
-            }
-
-            @Override
-            public void onFailure(ParticleCloudException exception) {
-                Log.d(TAG, exception.getBestMessage());
-            }
-        });
-    }
 
     public void buttonPressed1(View view) {
-        Log.d(TAG, "BUTTON PRESSED!");
-
+        Log.d(TAG,"BUTTON PRESSED!");
+        //e.setText(score);
         // 1. check if device has a value
         // - if device is null, then quit!
         if (this.mDevice == null) {
@@ -88,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String option = "0";
-
+        EditText e = (EditText) findViewById(R.id.editText9);
         Async.executeAsync(ParticleCloudSDK.getCloud(), new Async.ApiWork<ParticleCloud, Object>() {
             @Override
             public Object callApi(@NonNull ParticleCloud particleCloud) throws ParticleCloudException, IOException {
@@ -116,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(Object o) {
                 // put your success message here
                 Log.d(TAG, "Correct");
+                score++;
             }
 
             @Override
@@ -124,9 +101,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, exception.getBestMessage());
             }
         });
+
+
+
     }
     public void buttonPressed2(View view) {
-        Log.d(TAG, "BUTTON PRESSED!");
+
+        Log.d(TAG,"BUTTON PRESSED!");
 
         // 1. check if device has a value
         // - if device is null, then quit!
@@ -144,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 // --------------------------------------------
 
                 // what functions are "public" on the particle?
-                Log.d(TAG, "Available functions: " + mDevice.getFunctions());
+                Log.d(TAG, "Availble functions: " + mDevice.getFunctions());
 
                 // call the "lights" function on the particle
 
@@ -169,6 +150,36 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(ParticleCloudException exception) {
                 // put your error handling code here
+                Log.d(TAG, exception.getBestMessage());
+            }
+        });
+    }
+
+
+
+
+    /**
+     * Custom function to connect to the Particle Cloud and get the device
+     */
+    public void getDeviceFromCloud() {
+        // This function runs in the background
+        // It tries to connect to the Particle Cloud and get your device
+        Async.executeAsync(ParticleCloudSDK.getCloud(), new Async.ApiWork<ParticleCloud, Object>() {
+
+            @Override
+            public Object callApi(@NonNull ParticleCloud particleCloud) throws ParticleCloudException, IOException {
+                particleCloud.logIn(PARTICLE_USERNAME, PARTICLE_PASSWORD);
+                mDevice = particleCloud.getDevice(DEVICE_ID);
+                return -1;
+            }
+
+            @Override
+            public void onSuccess(Object o) {
+                Log.d(TAG, "Successfully got device from Cloud");
+            }
+
+            @Override
+            public void onFailure(ParticleCloudException exception) {
                 Log.d(TAG, exception.getBestMessage());
             }
         });
